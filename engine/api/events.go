@@ -191,7 +191,7 @@ func (b *eventsBroker) ServeHTTP() Handler {
 }
 
 func manageEvent(event sdk.Event, eventS string, subscriber eventsBrokerSubscribe) {
-	log.Debug("manageEvent> %s", event.EventType)
+	log.Warning("manageEvent> %s", event.EventType)
 	if strings.HasPrefix(event.EventType, "sdk.EventRunWorkflow") {
 		key := event.ProjectKey
 		name := event.WorkflowName
@@ -199,9 +199,9 @@ func manageEvent(event sdk.Event, eventS string, subscriber eventsBrokerSubscrib
 		s, ok := subscriber.Events[sdk.EventSubsWorkflowRuns]
 		if ok && event.EventType == "sdk.EventRunWorkflow" {
 			sent := false
-			log.Debug("manageEvent> Received: %s-%s", key, name)
+			log.Warning("manageEvent> Received: %s-%s", key, name)
 			for _, e := range s {
-				log.Debug("manageEvent> Subscription: %s-%s", e.ProjectKey, e.WorkflowName)
+				log.Warning("manageEvent> Subscription: %s-%s", e.ProjectKey, e.WorkflowName)
 				if e.ProjectKey == key && e.WorkflowName == name {
 					sent = true
 					subscriber.Queue <- eventS
